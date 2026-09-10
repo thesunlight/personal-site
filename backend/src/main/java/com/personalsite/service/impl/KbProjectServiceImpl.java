@@ -70,7 +70,7 @@ public class KbProjectServiceImpl implements KbProjectService {
         KbProject project = projectMapper.selectById(projectId);
         if (project == null) throw new BusinessException("Project not found");
 
-        String repo = project.getGithubRepo();
+        String repo = normalizeGithubRepo(project.getGithubRepo());
         String docsPath = project.getDocsPath();
         String branch = project.getBranch();
 
@@ -84,6 +84,25 @@ public class KbProjectServiceImpl implements KbProjectService {
 
         log.info("Synced {} documents for project {}", count, project.getName());
         return count;
+    }
+
+    /**
+     * Normalize GitHub repo string to "owner/repo" format.
+     * Handles both "https://github.com/owner/repo" and "owner/repo" formats.
+     */
+    private String normalizeGithubRepo(String repo) {
+        if (repo == null) return null;
+        // Remove trailing .git
+        repo = repo.replaceAll("\\.git$", "");
+        // Extract owner/repo from URL
+        if (repo.contains("github.com")) {
+            // https://github.com/owner/repo -> owner/repo
+            String[] parts = repo.split("github\\.com/");
+            if (parts.length > 1) {
+                return parts[1];
+            }
+        }
+        return repo;
     }
 
     private int saveDocTree(Long projectId, List<GitHubContentFetcher.DocFile> files, Long parentId, int order) {

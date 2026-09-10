@@ -11,6 +11,8 @@ public class KbDocumentVO {
     private String title;
     private String slug;
     private String path;
+    private String content;
+    private String contentZh;
     private String summary;
     private Long parentId;
     private Integer orderIndex;

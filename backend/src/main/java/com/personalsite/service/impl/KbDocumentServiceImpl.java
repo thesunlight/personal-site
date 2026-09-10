@@ -47,7 +47,8 @@ public class KbDocumentServiceImpl implements KbDocumentService {
         if (doc.getContent() == null && doc.getPath() != null) {
             KbProject project = projectMapper.selectById(projectId);
             if (project != null && project.getGithubRepo() != null) {
-                String content = gitHubFetcher.getFileContent(project.getGithubRepo(), doc.getPath(), project.getBranch());
+                String repo = normalizeGithubRepo(project.getGithubRepo());
+                String content = gitHubFetcher.getFileContent(repo, doc.getPath(), project.getBranch());
                 if (content != null) {
                     doc.setContent(content);
                     doc.setWordCount(content.length());
@@ -123,10 +124,25 @@ public class KbDocumentServiceImpl implements KbDocumentService {
     private KbDocumentVO toVO(KbDocument d) {
         KbDocumentVO vo = new KbDocumentVO();
         vo.setId(d.getId()); vo.setProjectId(d.getProjectId()); vo.setTitle(d.getTitle());
-        vo.setSlug(d.getSlug()); vo.setPath(d.getPath()); vo.setSummary(d.getSummary());
+        vo.setSlug(d.getSlug()); vo.setPath(d.getPath());
+        vo.setContent(d.getContent()); vo.setContentZh(d.getContentZh());
+        vo.setSummary(d.getSummary());
         vo.setParentId(d.getParentId()); vo.setOrderIndex(d.getOrderIndex());
         vo.setSourceUrl(d.getSourceUrl()); vo.setWordCount(d.getWordCount());
         vo.setCreatedAt(d.getCreatedAt()); vo.setUpdatedAt(d.getUpdatedAt());
         return vo;
+    }
+
+    /**
+     * Normalize GitHub repo string to "owner/repo" format.
+     */
+    private String normalizeGithubRepo(String repo) {
+        if (repo == null) return null;
+        repo = repo.replaceAll("\\.git$", "");
+        if (repo.contains("github.com")) {
+            String[] parts = repo.split("github\\.com/");
+            if (parts.length > 1) return parts[1];
+        }
+        return repo;
     }
 }
