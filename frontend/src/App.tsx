@@ -9,6 +9,8 @@ import TagArticles from './pages/TagArticles';
 import Archive from './pages/Archive';
 import About from './pages/About';
 import Search from './pages/Search';
+import KnowledgeBase from './pages/KnowledgeBase';
+import KbProjectDetail from './pages/KnowledgeBase/KbProjectDetail';
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
 import ArticleManage from './pages/admin/ArticleManage';
@@ -16,6 +18,7 @@ import ArticleEditor from './pages/admin/ArticleEditor';
 import CategoryManage from './pages/admin/CategoryManage';
 import TagManage from './pages/admin/TagManage';
 import SiteConfig from './pages/admin/SiteConfig';
+import KbManage from './pages/admin/KbManage';
 import ProtectedRoute from './components/Admin/ProtectedRoute';
 
 export default function App() {
@@ -31,6 +34,8 @@ export default function App() {
         <Route path="/archives" element={<Archive />} />
         <Route path="/about" element={<About />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/kb" element={<KnowledgeBase />} />
+        <Route path="/kb/:slug" element={<KbProjectDetail />} />
       </Route>
 
       {/* Admin routes */}
@@ -43,6 +48,7 @@ export default function App() {
         <Route path="categories" element={<CategoryManage />} />
         <Route path="tags" element={<TagManage />} />
         <Route path="settings" element={<SiteConfig />} />
+        <Route path="kb" element={<KbManage />} />
       </Route>
     </Routes>
   );

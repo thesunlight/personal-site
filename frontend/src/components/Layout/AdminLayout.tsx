@@ -8,6 +8,7 @@ const menuItems = [
   { key: 'admin.articles', path: '/admin/articles' },
   { key: 'admin.categories', path: '/admin/categories' },
   { key: 'admin.tags', path: '/admin/tags' },
+  { key: 'admin.kb', path: '/admin/kb' },
   { key: 'admin.settings', path: '/admin/settings' },
 ];
 

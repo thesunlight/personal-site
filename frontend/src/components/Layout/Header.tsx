@@ -6,6 +6,7 @@ import { useI18n } from '../../i18n';
 const navItems = [
   { key: 'nav.home', path: '/' },
   { key: 'nav.articles', path: '/articles' },
+  { key: 'nav.kb', path: '/kb' },
   { key: 'nav.archives', path: '/archives' },
   { key: 'nav.about', path: '/about' },
 ];

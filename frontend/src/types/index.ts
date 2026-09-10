@@ -109,3 +109,31 @@ export interface ArticleFetchResult {
   images: string[];
   downloadedImages: number;
 }
+
+export interface KbProject {
+  id: number;
+  name: string;
+  slug: string;
+  githubRepo: string | null;
+  description: string | null;
+  logoUrl: string | null;
+  sourceUrl: string | null;
+  docCount: number;
+  createdAt: string;
+}
+
+export interface KbDocument {
+  id: number;
+  projectId: number;
+  title: string;
+  slug: string;
+  path: string | null;
+  summary: string | null;
+  parentId: number | null;
+  orderIndex: number;
+  sourceUrl: string | null;
+  wordCount: number;
+  content?: string;
+  contentZh?: string;
+  children?: KbDocument[];
+}

@@ -36,6 +36,7 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
     volumes:
       - /var/www/personal-site/uploads:/app/uploads
       - ./logs:/app/logs
