@@ -4,6 +4,8 @@ export interface Article {
   slug: string;
   summary: string;
   coverImage: string | null;
+  sourceUrl: string | null;
+  sourceName: string | null;
   status: number;
   isTop: number;
   viewCount: number;
@@ -18,6 +20,7 @@ export interface Article {
 export interface ArticleDetail extends Article {
   content: string;
   categoryId: number;
+  sourceAuthor: string | null;
   prevArticle: { id: number; title: string; slug: string } | null;
   nextArticle: { id: number; title: string; slug: string } | null;
 }
@@ -93,4 +96,16 @@ export interface DashboardStats {
   categoryCount: number;
   tagCount: number;
   totalViews: number;
+}
+
+export interface ArticleFetchResult {
+  title: string;
+  content: string;
+  summary: string;
+  author: string;
+  sourceName: string;
+  coverImage: string;
+  sourceUrl: string;
+  images: string[];
+  downloadedImages: number;
 }

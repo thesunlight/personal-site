@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Vditor from 'vditor';
 import 'vditor/dist/index.css';
@@ -13,7 +13,14 @@ export default function ArticleEditor() {
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const isEdit = !!id;
+  const prefilled = location.state?.prefilled as {
+    title?: string; content?: string; summary?: string;
+    sourceUrl?: string; sourceName?: string; sourceAuthor?: string;
+    coverImage?: string; images?: string[];
+    categoryId?: number; status?: number;
+  } | null;
 
   const vditorRef = useRef<Vditor | null>(null);
   const editorDomRef = useRef<HTMLDivElement>(null);
@@ -27,6 +34,9 @@ export default function ArticleEditor() {
   const [isTop, setIsTop] = useState(0);
   const [error, setError] = useState('');
   const [pendingContent, setPendingContent] = useState<string | null>(null);
+  const [sourceUrl, setSourceUrl] = useState('');
+  const [sourceName, setSourceName] = useState('');
+  const [sourceAuthor, setSourceAuthor] = useState('');
 
   const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: () => categoryApi.getAll().then(r => r.data) });
   const { data: tags } = useQuery({ queryKey: ['tags'], queryFn: () => tagApi.getAll().then(r => r.data) });
@@ -50,12 +60,32 @@ export default function ArticleEditor() {
       setTagIds(article.tags?.map((tg: any) => tg.id) || []);
       setStatus(article.status);
       setIsTop(article.isTop);
+      setSourceUrl(article.sourceUrl || '');
+      setSourceName(article.sourceName || '');
+      setSourceAuthor((article as any).sourceAuthor || '');
       // Fetch full content for editing
       fetch(`/api/articles/${article.slug}`)
         .then(r => r.json())
         .then(r => { if (r.data?.content) setPendingContent(r.data.content); });
     }
   }, [article, categories]);
+
+  // Fill form fields from prefilled data (article collection)
+  useEffect(() => {
+    if (prefilled && !isEdit) {
+      if (prefilled.title) setTitle(prefilled.title);
+      if (prefilled.summary) setSummary(prefilled.summary);
+      if (prefilled.sourceUrl) setSourceUrl(prefilled.sourceUrl);
+      if (prefilled.sourceName) setSourceName(prefilled.sourceName);
+      if (prefilled.sourceAuthor) setSourceAuthor(prefilled.sourceAuthor);
+      if (prefilled.categoryId) setCategoryId(prefilled.categoryId);
+      if (prefilled.status !== undefined) setStatus(prefilled.status);
+      if (prefilled.content) setPendingContent(prefilled.content);
+      // Auto-generate slug
+      const slug = prefilled.title?.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-').replace(/^-|-$/g, '') || `article-${Date.now()}`;
+      setSlug(slug);
+    }
+  }, [prefilled, isEdit]);
 
   // Initialize Vditor once the DOM element is ready
   useEffect(() => {
@@ -123,7 +153,7 @@ export default function ArticleEditor() {
     if (!title.trim()) { setError(t('editor.titleRequired')); return; }
     if (categoryId === '') { setError(t('editor.categoryRequired')); return; }
     const content = vditorRef.current?.getValue() || '';
-    saveMutation.mutate({ title, slug, content, summary, categoryId: Number(categoryId), tagIds, status, isTop });
+    saveMutation.mutate({ title, slug, content, summary, categoryId: Number(categoryId), tagIds, status, isTop, sourceUrl: sourceUrl || null, sourceName: sourceName || null, sourceAuthor: sourceAuthor || null });
   };
 
   const generateSlug = () => {
@@ -239,6 +269,38 @@ export default function ArticleEditor() {
               {t('editor.pinned')}
             </label>
           </section>
+
+          {/* Source info (for collected articles) */}
+          {(sourceUrl || !isEdit) && (
+            <section>
+              <label className="block text-xs font-medium uppercase tracking-wider text-ink-400 mb-2">
+                {t('fetch.sourceInfo')}
+              </label>
+              <input
+                type="text"
+                value={sourceUrl}
+                onChange={e => setSourceUrl(e.target.value)}
+                placeholder={t('fetch.sourceUrlPlaceholder')}
+                className="w-full px-3 py-2 text-sm bg-transparent border border-ink-200 dark:border-ink-700 rounded-md outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-colors mb-2"
+              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={sourceName}
+                  onChange={e => setSourceName(e.target.value)}
+                  placeholder={t('fetch.sourceNamePlaceholder')}
+                  className="flex-1 px-3 py-2 text-sm bg-transparent border border-ink-200 dark:border-ink-700 rounded-md outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-colors"
+                />
+                <input
+                  type="text"
+                  value={sourceAuthor}
+                  onChange={e => setSourceAuthor(e.target.value)}
+                  placeholder={t('fetch.sourceAuthorPlaceholder')}
+                  className="flex-1 px-3 py-2 text-sm bg-transparent border border-ink-200 dark:border-ink-700 rounded-md outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-colors"
+                />
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

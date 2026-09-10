@@ -11,6 +11,8 @@ public class ArticleVO {
     private String slug;
     private String summary;
     private String coverImage;
+    private String sourceUrl;
+    private String sourceName;
     private Integer status;
     private Integer isTop;
     private Integer viewCount;

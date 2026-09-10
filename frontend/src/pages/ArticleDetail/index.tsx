@@ -52,6 +52,17 @@ export default function ArticleDetail() {
               <span>·</span>
               <span>{article.wordCount} {t('common.words')}</span>
             </div>
+            {article.sourceUrl && (
+              <div className="flex items-center gap-2 mt-3 text-[12px] text-ink-400 dark:text-ink-500">
+                <span className="text-[10px] border border-ink-200 dark:border-ink-700 rounded px-1">{t('fetch.repost')}</span>
+                {article.sourceName && <span>· {article.sourceName}</span>}
+                {article.sourceAuthor && <span>· {article.sourceAuthor}</span>}
+                <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer"
+                   className="text-accent hover:underline underline-offset-[3px]">
+                  {t('fetch.viewOriginal')} →
+                </a>
+              </div>
+            )}
             {article.tags?.length > 0 && (
               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-[12px]">
                 {article.tags.map(t => (

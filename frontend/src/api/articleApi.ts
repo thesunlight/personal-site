@@ -1,5 +1,5 @@
 import client from './client';
-import type { Result, PageResult, Article, ArticleDetail, ArchiveYear } from '../types';
+import type { Result, PageResult, Article, ArticleDetail, ArchiveYear, ArticleFetchResult } from '../types';
 
 export const articleApi = {
   getList: (params: { page?: number; size?: number; categoryId?: number; tagId?: number; keyword?: string }) =>
@@ -22,4 +22,10 @@ export const articleApi = {
     client.put<any, Result<void>>(`/api/articles/${id}/top`),
   toggleStatus: (id: number) =>
     client.put<any, Result<void>>(`/api/articles/${id}/status`),
+  fetch: {
+    parse: (url: string) =>
+      client.post<any, Result<ArticleFetchResult>>('/api/article-fetch/parse', { url }),
+    save: (data: any) =>
+      client.post<any, Result<Article>>('/api/article-fetch/save', data),
+  },
 };

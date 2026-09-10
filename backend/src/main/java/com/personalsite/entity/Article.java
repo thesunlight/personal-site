@@ -14,6 +14,9 @@ public class Article {
     private String summary;
     private String content;
     private String coverImage;
+    private String sourceUrl;
+    private String sourceName;
+    private String sourceAuthor;
     private Long categoryId;
     private Long authorId;
     private Integer status;

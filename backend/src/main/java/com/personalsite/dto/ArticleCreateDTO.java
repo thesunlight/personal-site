@@ -15,6 +15,9 @@ public class ArticleCreateDTO {
     @NotBlank(message = "Content is required")
     private String content;
     private String coverImage;
+    private String sourceUrl;
+    private String sourceName;
+    private String sourceAuthor;
     @NotNull(message = "Category is required")
     private Long categoryId;
     private Integer status;

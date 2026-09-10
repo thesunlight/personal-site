@@ -74,6 +74,9 @@ public class ArticleServiceImpl implements ArticleService {
         vo.setSummary(av.getSummary());
         vo.setContent(article.getContent());
         vo.setCoverImage(av.getCoverImage());
+        vo.setSourceUrl(article.getSourceUrl());
+        vo.setSourceName(article.getSourceName());
+        vo.setSourceAuthor(article.getSourceAuthor());
         vo.setStatus(av.getStatus());
         vo.setIsTop(av.getIsTop());
         vo.setViewCount(av.getViewCount());
@@ -168,6 +171,9 @@ public class ArticleServiceImpl implements ArticleService {
         article.setSummary(dto.getSummary() != null ? dto.getSummary() : generateSummary(dto.getContent()));
         article.setContent(dto.getContent());
         article.setCoverImage(dto.getCoverImage());
+        article.setSourceUrl(dto.getSourceUrl());
+        article.setSourceName(dto.getSourceName());
+        article.setSourceAuthor(dto.getSourceAuthor());
         article.setCategoryId(dto.getCategoryId());
         article.setAuthorId(authorId);
         article.setStatus(dto.getStatus() != null ? dto.getStatus() : 1);
@@ -196,6 +202,9 @@ public class ArticleServiceImpl implements ArticleService {
             article.setWordCount(dto.getContent().length());
         }
         if (dto.getCoverImage() != null) article.setCoverImage(dto.getCoverImage());
+        if (dto.getSourceUrl() != null) article.setSourceUrl(dto.getSourceUrl());
+        if (dto.getSourceName() != null) article.setSourceName(dto.getSourceName());
+        if (dto.getSourceAuthor() != null) article.setSourceAuthor(dto.getSourceAuthor());
         if (dto.getCategoryId() != null) article.setCategoryId(dto.getCategoryId());
         if (dto.getIsTop() != null) article.setIsTop(dto.getIsTop());
 

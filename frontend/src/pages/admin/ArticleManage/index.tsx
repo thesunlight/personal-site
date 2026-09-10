@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { articleApi } from '../../../api/articleApi';
 import { formatDate } from '../../../utils/date';
 import Pagination from '../../../components/Common/Pagination';
+import ArticleFetchDialog from '../../../components/Admin/ArticleFetchDialog';
 import { useI18n } from '../../../i18n';
 
 export default function ArticleManage() {
@@ -11,6 +12,7 @@ export default function ArticleManage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
+  const [showFetchDialog, setShowFetchDialog] = useState(false);
   const { data } = useQuery({
     queryKey: ['adminArticles', page, keyword],
     queryFn: () => articleApi.getListAll({ page, size: 10, keyword: keyword || undefined }).then(r => r.data),
@@ -24,9 +26,14 @@ export default function ArticleManage() {
     <div>
       <div className="flex justify-between items-baseline mb-6">
         <h1 className="font-serif text-2xl font-bold italic text-ink-900 dark:text-ink-100">{t('admin.articles')}</h1>
-        <Link to="/admin/articles/new" className="text-sm text-accent hover:text-accent/80 transition-colors">
-          {t('dashboard.newArticle')} →
-        </Link>
+        <div className="flex gap-4">
+          <button onClick={() => setShowFetchDialog(true)} className="text-sm text-accent hover:text-accent/80 transition-colors">
+            {t('fetch.title')} →
+          </button>
+          <Link to="/admin/articles/new" className="text-sm text-accent hover:text-accent/80 transition-colors">
+            {t('dashboard.newArticle')} →
+          </Link>
+        </div>
       </div>
 
       <div className="mb-6">
@@ -56,6 +63,7 @@ export default function ArticleManage() {
                 <td className="py-3 pr-4">
                   <div className="flex items-center gap-2">
                     {a.isTop === 1 && <span className="text-[10px] text-accent font-medium shrink-0">PIN</span>}
+                    {a.sourceUrl && <span className="text-[10px] text-ink-400 dark:text-ink-500 border border-ink-200 dark:border-ink-700 rounded px-1 shrink-0">{t('fetch.repost')}</span>}
                     <Link to={`/admin/articles/${a.id}/edit`} className="font-medium text-ink-800 dark:text-ink-200 hover:text-accent transition-colors line-clamp-1">
                       {a.title}
                     </Link>
@@ -85,6 +93,8 @@ export default function ArticleManage() {
         </table>
       </div>
       {data && <Pagination current={data.page} total={data.total} pages={data.pages} onChange={setPage} />}
+
+      <ArticleFetchDialog open={showFetchDialog} onClose={() => setShowFetchDialog(false)} />
     </div>
   );
 }

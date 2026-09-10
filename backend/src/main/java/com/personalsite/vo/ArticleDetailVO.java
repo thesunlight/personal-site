@@ -12,6 +12,9 @@ public class ArticleDetailVO {
     private String summary;
     private String content;
     private String coverImage;
+    private String sourceUrl;
+    private String sourceName;
+    private String sourceAuthor;
     private Integer status;
     private Integer isTop;
     private Integer viewCount;
