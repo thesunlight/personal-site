@@ -1,0 +1,24 @@
+# Runtime data
+uploads/
+logs/
+
+# Environment variables (secrets)
+.env
+
+# Java
+backend/target/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+obsidian-sync/

@@ -1,0 +1,128 @@
+@import 'highlight.js/styles/github.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply antialiased; }
+  ::selection { @apply bg-accent-100 dark:bg-accent-900/60 text-accent-900 dark:text-accent-100; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent text-white px-4 py-2 rounded-md hover:bg-accent-600 transition-colors font-medium text-sm;
+  }
+  .btn-secondary {
+    @apply bg-transparent text-ink-600 dark:text-ink-300 px-4 py-2 rounded-md border border-ink-200 dark:border-ink-700 hover:border-accent hover:text-accent transition-colors font-medium text-sm;
+  }
+  .btn-danger {
+    @apply bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors font-medium text-sm;
+  }
+  .input-field {
+    @apply w-full px-3 py-2 border border-ink-200 dark:border-ink-700 rounded-md bg-transparent focus:ring-1 focus:ring-accent focus:border-accent outline-none transition-colors;
+  }
+  .card {
+    @apply bg-white dark:bg-ink-800/60 rounded-lg border border-ink-100 dark:border-ink-800 p-5;
+  }
+}
+
+/* Interactive underline — the signature antfu-style link */
+.link {
+  @apply text-accent underline decoration-accent/30 underline-offset-[3px] hover:decoration-accent transition-colors;
+}
+.link-plain {
+  @apply text-inherit no-underline hover:text-accent hover:underline decoration-accent/40 underline-offset-[3px] transition-colors;
+}
+
+/* Article list row — plain typographic list, no cards */
+.article-row {
+  @apply flex items-baseline justify-between gap-6 py-3.5 border-b border-ink-100 dark:border-ink-800/80;
+}
+.article-row:last-child { @apply border-b-0; }
+
+/* Markdown content styles — reading first */
+.markdown-body { @apply text-ink-600 dark:text-ink-300 leading-[1.8] text-[15.5px]; }
+.markdown-body h1 { @apply font-serif text-3xl font-bold mt-10 mb-5 pb-3 border-b border-ink-100 dark:border-ink-800 text-ink-800 dark:text-ink-100; }
+.markdown-body h2 { @apply font-serif text-2xl font-bold mt-9 mb-4 pb-2 border-b border-ink-100 dark:border-ink-800 text-ink-800 dark:text-ink-100; }
+.markdown-body h3 { @apply font-serif text-xl font-bold mt-7 mb-3 text-ink-800 dark:text-ink-100; }
+.markdown-body h4 { @apply text-lg font-semibold mt-6 mb-2 text-ink-800 dark:text-ink-100; }
+.markdown-body p { @apply mb-5; }
+.markdown-body a { @apply text-accent underline decoration-accent/30 underline-offset-[3px] hover:decoration-accent; }
+.markdown-body ul { @apply list-disc pl-6 mb-5 space-y-1; }
+.markdown-body ol { @apply list-decimal pl-6 mb-5 space-y-1; }
+.markdown-body li { @apply leading-7; }
+.markdown-body blockquote { @apply border-l-[3px] border-accent/60 pl-5 py-1 my-6 text-ink-500 dark:text-ink-400 italic; }
+.markdown-body pre { @apply bg-ink-50 dark:bg-ink-950/50 rounded-md p-4 overflow-x-auto my-5 text-[13px] leading-6 border border-ink-100 dark:border-ink-800; }
+.markdown-body code { @apply font-mono text-[0.9em]; }
+.markdown-body :not(pre) > code { @apply bg-ink-100 dark:bg-ink-800 text-accent-700 dark:text-accent-400 px-1.5 py-0.5 rounded text-[0.85em]; }
+.markdown-body img { @apply max-w-full rounded-md my-6; }
+.markdown-body table { @apply w-full border-collapse my-6 text-sm; }
+.markdown-body th { @apply bg-ink-50 dark:bg-ink-800 font-semibold px-4 py-2.5 border border-ink-200 dark:border-ink-700 text-left; }
+.markdown-body td { @apply px-4 py-2.5 border border-ink-200 dark:border-ink-700; }
+.markdown-body hr { @apply my-10 border-ink-200 dark:border-ink-700; }
+
+/* Copy button for code blocks */
+.code-block-wrapper { @apply relative; }
+.code-block-wrapper .copy-btn {
+  @apply absolute top-2.5 right-2.5 px-2 py-0.5 text-[11px] text-ink-400 hover:text-accent rounded opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer;
+}
+
+/* Code highlight dark mode */
+.dark .hljs { color: #c9d1d9; background: transparent; }
+.dark .hljs-keyword, .dark .hljs-selector-tag, .dark .hljs-literal, .dark .hljs-section { color: #ff7b72; }
+.dark .hljs-string, .dark .hljs-title, .dark .hljs-name, .dark .hljs-type { color: #a5d6ff; }
+.dark .hljs-comment, .dark .hljs-quote { color: #8b949e; }
+.dark .hljs-number, .dark .hljs-symbol, .dark .hljs-meta, .dark .hljs-attr { color: #79c0ff; }
+.dark .hljs-built_in, .dark .hljs-class .hljs-title { color: #ffa657; }
+.dark .hljs-variable, .dark .hljs-template-variable { color: #ffa657; }
+
+/* TOC styles */
+.toc-link { @apply block py-1 px-3 text-[13px] text-ink-400 dark:text-ink-500 hover:text-accent border-l-2 border-transparent hover:border-accent/40 transition-colors; }
+.toc-link.active { @apply text-accent border-accent; }
+
+/* Vditor editor overrides — blend with antfu theme */
+.vditor {
+  @apply rounded-md border border-ink-200 dark:border-ink-700;
+  font-family: inherit;
+  --border-color: theme('colors.ink.200');
+}
+.vditor-toolbar {
+  @apply bg-white dark:bg-ink-800 border-ink-200 dark:border-ink-700;
+}
+.vditor-toolbar svg { @apply text-ink-500; }
+.vditor-toolbar .vditor-toolbar__item button:hover svg,
+.vditor-toolbar .vditor-toolbar__item--current svg {
+  @apply text-accent;
+}
+.vditor-ir .vditor-reset {
+  @apply text-ink-700 dark:text-ink-200;
+  font-family: inherit;
+}
+.vditor-ir .vditor-reset h1,
+.vditor-ir .vditor-reset h2 {
+  @apply font-serif;
+}
+.vditor-ir .vditor-reset a {
+  @apply text-accent underline decoration-accent/30 underline-offset-[3px];
+}
+.vditor-ir .vditor-reset code {
+  @apply text-accent-700 dark:text-accent-400;
+}
+.vditor-ir .vditor-reset pre {
+  @apply bg-ink-50 dark:bg-ink-950/50 border border-ink-100 dark:border-ink-800;
+}
+.vditor-ir .vditor-reset blockquote {
+  @apply border-accent/60;
+}
+.vditor-ir .vditor-ir__preview {
+  @apply bg-ink-50/50 dark:bg-ink-900/50 border-l border-ink-100 dark:border-ink-800;
+}
+.vditor-reset .vditor-ir__node--expand .vditor-ir__marker {
+  @apply text-accent/40;
+}
+/* Dark mode accent adjustment — brighter green on dark */
+.dark .text-accent { color: #29c46f; }
+.dark .decoration-accent\/30 { text-decoration-color: rgba(41, 196, 111, 0.3); }
+.dark .hover\:decoration-accent:hover { text-decoration-color: #29c46f; }

@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://ps-mysql:3306/personal_site?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:PsMysql_9xKp2fRz4q}
+  flyway:
+    enabled: true
+    repair-on-migrate: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:personal-site-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
+  upload:
+    path: /app/uploads
+    url-prefix: /uploads
+
+logging:
+  level:
+    root: INFO
+    com.personalsite: INFO
+  file:
+    name: /app/logs/app.log

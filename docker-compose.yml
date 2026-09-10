@@ -1,0 +1,57 @@
+services:
+  ps-mysql:
+    image: mysql:8.0
+    restart: on-failure:3
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb_buffer_pool_size=256M
+      - --max_connections=100
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: personal_site
+    volumes:
+      - ps_data:/var/lib/mysql
+    networks:
+      - ps_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      retries: 10
+      start_period: 30s
+
+  ps-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: on-failure:3
+    depends_on:
+      ps-mysql:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://ps-mysql:3306/personal_site?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    volumes:
+      - /var/www/personal-site/uploads:/app/uploads
+      - ./logs:/app/logs
+    networks:
+      - ps_network
+
+  ps-frontend-builder:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - frontend_dist:/dist
+
+volumes:
+  ps_data:
+  frontend_dist:
+
+networks:
+  ps_network:
